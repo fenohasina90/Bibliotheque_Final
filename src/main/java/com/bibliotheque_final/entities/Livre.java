@@ -27,17 +27,4 @@ public class Livre {
 
     @Column(name = "image", length = 50)
     private String image;
-
-    @Column(name = "est_etudiant")
-    private Boolean estEtudiant;
-
-    @Column(name = "est_prof")
-    private Boolean estProf;
-
-    @Column(name = "est_pro")
-    private Boolean estPro;
-
-    @Column(name = "est_anonyme")
-    private Boolean estAnonyme;
-
 }
