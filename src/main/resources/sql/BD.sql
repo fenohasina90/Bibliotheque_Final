@@ -7,12 +7,9 @@ CREATE TABLE livre(
     titre VARCHAR(255),
     auteur VARCHAR(255),
     age INT,
-    image VARCHAR(50),
-    est_etudiant BOOLEAN,
-    est_prof BOOLEAN,
-    est_pro BOOLEAN,
-    est_anonyme BOOLEAN
+    image VARCHAR(50)
 );
+
 
 CREATE TABLE adherant(
     id SERIAL PRIMARY KEY,
@@ -26,6 +23,12 @@ CREATE TABLE genre(
     id SERIAL PRIMARY KEY,
     nom VARCHAR(255)
 );
+
+CREATE TABLE livre_adherant(
+    id SERIAL PRIMARY KEY,
+    livre_id INT REFERENCES livre(id),
+    adherant_id INT REFERENCES adherant(id)
+);  
 
 CREATE TABLE statut_livre(
     id SERIAL PRIMARY KEY,

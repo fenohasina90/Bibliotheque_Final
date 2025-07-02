@@ -9,6 +9,9 @@ import lombok.Setter;
 @Entity
 @Table(name = "genre_livre")
 public class GenreLivre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "livre_id")
     private Livre livre;
@@ -16,5 +19,4 @@ public class GenreLivre {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
     private Genre genre;
-
 }
