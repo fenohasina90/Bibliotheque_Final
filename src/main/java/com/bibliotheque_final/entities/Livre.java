@@ -27,4 +27,7 @@ public class Livre {
 
     @Column(name = "image", length = 50)
     private String image;
+
+    @Column(name = "exemplaire")
+    private Integer exemplaire;
 }
