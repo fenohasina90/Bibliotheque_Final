@@ -28,7 +28,7 @@ public class UtilisateurController {
 
     @GetMapping("/accueil")
     public ModelAndView home (){
-        ModelAndView mv = new ModelAndView("auth/home");
+        ModelAndView mv = new ModelAndView("livre/listeLivres");
         return mv;
     }
 
@@ -51,7 +51,7 @@ public class UtilisateurController {
             } else {
                 
                 session.setAttribute("utilisateurConnecte", utilisateurConnecte);
-                return new ModelAndView("redirect:/accueil"); // redirige vers page d accueil
+                return new ModelAndView("redirect:/livre"); // redirige vers page d accueil
             }
         } else {
             // Authentification echouee : on retourne au formulaire avec message d'erreur
