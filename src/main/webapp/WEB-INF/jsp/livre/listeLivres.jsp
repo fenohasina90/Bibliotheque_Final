@@ -505,7 +505,7 @@
                                     <div class="card-actions">
                                         <c:choose>
                                             <c:when test="${livre.disponible > 0}">
-                                                <form method="post" action="/livre/reserver" style="flex: 1;">
+                                                <form method="post" action="/reservation" style="flex: 1;">
                                                     <input type="hidden" name="livreId" value="${livre.livreId}"/>
                                                     <input type="hidden" name="idAdherant" value="${idAdherant}"/>
                                                     <button type="submit" class="btn btn-reserve btn-icon">

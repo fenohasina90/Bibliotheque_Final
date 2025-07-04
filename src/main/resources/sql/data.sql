@@ -7,9 +7,9 @@ INSERT INTO utilisateur (nom, prenom, date_naissance, email, mdp, est_admin) VAL
 ('admin', '123', '1988-07-22', 'sadmin@gmail.com', 'securepwd456', TRUE);
 
 INSERT INTO utilisateur (nom, prenom, date_naissance, email, mdp, est_admin, id_adherant) VALUES
+('Koto', 'Kely', '1992-05-10', 'koto@email.com', '123', FALSE, 3);
 ('Dupont', 'Jean', '1995-03-15', 'dupont@gmail.com', '12345678', FALSE, 1),
 ('Lefevre', 'Paul', '2000-11-30', 'paul.lefevre@email.com', 'paul2023', FALSE, 2),
-('Durand', 'Marie', '1992-05-10', 'marie.durand@email.com', 'marie789', FALSE, 3);
 
 INSERT INTO livre (titre, auteur, age, exemplaire, image) VALUES
 ('Le Petit Prince', 'Antoine de Saint-Exupery', 8, 10, 'images/petit_prince.jpg'),
@@ -51,3 +51,17 @@ INSERT INTO historique_livre (livre_id, statut_id, date_debut) VALUES
 (4, 1, '2024-03-15'),
 (5, 2, '2024-04-10'),
 (5, 1, '2024-06-20');
+
+INSERT INTO statut_reservation (nom) VALUES 
+('En attente'),
+('Refusee'),
+('Validee'),
+('Annulee'),
+('Terminee');
+
+INSERT INTO reservation (utilisateur_id, livre_id, date_debut) VALUES
+(1, 1, '2025-01-01'),
+(2, 1, '2025-01-01'),
+(3, 1, '2025-01-01'),
+(1, 2, '2025-07-04'),
+(4, 4, '2025-07-05');
