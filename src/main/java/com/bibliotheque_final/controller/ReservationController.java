@@ -26,7 +26,6 @@ public class ReservationController {
         mv.addObject("livreId", livreId);
         return mv;
     }
-    
 
     @PostMapping("/create")
     public ModelAndView saveReservation(

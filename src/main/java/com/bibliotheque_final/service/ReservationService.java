@@ -2,6 +2,7 @@ package com.bibliotheque_final.service;
 
 import com.bibliotheque_final.entities.*;
 import com.bibliotheque_final.repositories.*;
+import com.bibliotheque_final.repositories.StatutReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,8 @@ public class ReservationService {
         Integer ageUser = Period.between(dateNaissance, currentDate).getYears();
         Integer ageLivre = livre.getAge();
 
-        return ageLivre >= ageUser;
+        return ageLivre <= ageUser;
+
     }
 
     public boolean estDisponible(Integer idLivre, LocalDate dateAReserve){
@@ -84,6 +86,7 @@ public class ReservationService {
         HistoriqueReservation historiqueReservation = new HistoriqueReservation();
         historiqueReservation.setReservation(reservation);
         historiqueReservation.setStatut(statutReservation);
+        historiqueReservation.setDateDebut(LocalDate.now());
         historiqueReservationRepository.save(historiqueReservation);
 
     }

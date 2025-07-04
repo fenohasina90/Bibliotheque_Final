@@ -19,8 +19,94 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding-top: 80px; /* Espace pour la navbar fixe */
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 20px;
             line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .navbar-brand i {
+            font-size: 1.8rem;
+            color: #3498db;
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 0 2px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
         }
 
         .container {
@@ -363,7 +449,48 @@
             margin-right: 8px;
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .navbar-nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                flex-direction: column;
+                padding: 20px;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-nav.active {
+                transform: translateY(0);
+            }
+
+            .navbar-toggle {
+                display: block;
+            }
+
+            .nav-link {
+                padding: 15px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                margin: 0;
+                justify-content: center;
+            }
+
+            .nav-link:last-child {
+                border-bottom: none;
+            }
+
+            body {
+                padding-top: 70px;
+            }
+
             .container {
                 margin: 10px;
                 border-radius: 15px;
@@ -420,6 +547,51 @@
     </style>
 </head>
 <body>
+<!-- Navbar -->
+<nav class="navbar">
+    <a href="#" class="navbar-brand">
+        <i class="fas fa-book"></i>
+        Bibliothèque
+    </a>
+
+    <button class="navbar-toggle" onclick="toggleNavbar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <ul class="navbar-nav" id="navbarNav">
+        <li class="nav-item">
+            <a href="/home" class="nav-link active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/abonnement" class="nav-link">
+                <i class="fas fa-id-card"></i>
+                <span>Abonnement</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/emprunt" class="nav-link">
+                <i class="fas fa-hand-holding"></i>
+                <span>Emprunt</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/reservation" class="nav-link">
+                <i class="fas fa-bookmark"></i>
+                <span>Réservation</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/statistique" class="nav-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Statistiques</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
 <div class="container">
     <div class="header">
         <h1><i class="fas fa-book"></i> Bibliothèque Numérique</h1>
@@ -467,22 +639,22 @@
                             <span class="id-badge">#${livre.livreId}</span>
                             <c:choose>
                                 <c:when test="${livre.disponible > 5}">
-                                        <span class="availability available">
-                                            <i class="fas fa-check-circle"></i>
-                                            Disponible
-                                        </span>
+                                            <span class="availability available">
+                                                <i class="fas fa-check-circle"></i>
+                                                Disponible
+                                            </span>
                                 </c:when>
                                 <c:when test="${livre.disponible > 0}">
-                                        <span class="availability limited">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                            Limité
-                                        </span>
+                                            <span class="availability limited">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                Limité
+                                            </span>
                                 </c:when>
                                 <c:otherwise>
-                                        <span class="availability unavailable">
-                                            <i class="fas fa-times-circle"></i>
-                                            Indisponible
-                                        </span>
+                                            <span class="availability unavailable">
+                                                <i class="fas fa-times-circle"></i>
+                                                Indisponible
+                                            </span>
                                 </c:otherwise>
                             </c:choose>
                         </div>
@@ -552,8 +724,37 @@
 </div>
 
 <script>
+    // Fonction pour basculer la navbar mobile
+    function toggleNavbar() {
+        const navbarNav = document.getElementById('navbarNav');
+        navbarNav.classList.toggle('active');
+    }
+
+    // Fermer la navbar mobile lors du clic sur un lien
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const navbarNav = document.getElementById('navbarNav');
+            navbarNav.classList.remove('active');
+        });
+    });
+
+    // Gestion de l'état actif des liens de navigation
+    function setActiveNavLink() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    }
+
     // Animation d'entrée pour les cartes
     document.addEventListener('DOMContentLoaded', function() {
+        setActiveNavLink();
+
         const cards = document.querySelectorAll('.book-card');
         cards.forEach((card, index) => {
             card.style.opacity = '0';
@@ -577,7 +778,7 @@
     });
 
     // Confirmation pour les actions
-    document.querySelectorAll('form[action*="/reserver"]').forEach(form => {
+    document.querySelectorAll('form[action*="/reservation"]').forEach(form => {
         form.addEventListener('submit', function(e) {
             const bookTitle = this.closest('.book-card').querySelector('.book-title').textContent;
             if (!confirm(`Êtes-vous sûr de vouloir réserver "${bookTitle}" ?`)) {
@@ -600,16 +801,16 @@
         const feedback = document.createElement('div');
         feedback.className = `alert alert-${type}`;
         feedback.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 600;
-                z-index: 1000;
-                animation: slideIn 0.3s ease;
-            `;
+                    position: fixed;
+                    top: 90px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 600;
+                    z-index: 1000;
+                    animation: slideIn 0.3s ease;
+                `;
         feedback.style.background = type === 'success' ? '#28a745' : '#dc3545';
         feedback.textContent = message;
         document.body.appendChild(feedback);
@@ -622,11 +823,11 @@
     // Style pour l'animation
     const style = document.createElement('style');
     style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-        `;
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
     document.head.appendChild(style);
 </script>
 </body>
