@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "abonnement")
 public class Abonnement {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Correspond à SERIAL en PostgreSQL
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

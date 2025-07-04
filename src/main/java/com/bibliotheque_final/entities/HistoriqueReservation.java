@@ -9,19 +9,20 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "reservation")
-public class Reservation {
+@Table(name = "historique_reservation")
+public class HistoriqueReservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Correspond à SERIAL en PostgreSQL
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "utilisateur_id")
-    private Utilisateur utilisateur;
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "livre_id")
-    private Livre livre;
+    @JoinColumn(name = "statut_id")
+    private StatutReservation statut;
 
     @Column(name = "date_debut")
     private LocalDate dateDebut;

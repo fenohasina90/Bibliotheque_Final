@@ -21,7 +21,7 @@ public class UtilisateurController {
     }
 
     @GetMapping("/")
-     public ModelAndView loginForm (){
+    public ModelAndView loginForm (){
         ModelAndView mv = new ModelAndView("auth/login");
         return mv;
     }
@@ -49,8 +49,8 @@ public class UtilisateurController {
             if (utilisateurConnecte.getEstAdmin() == true) {
                 return new ModelAndView("redirect:/admin");
             } else {
-                
-                session.setAttribute("utilisateurConnecte", utilisateurConnecte);
+
+                session.setAttribute("utilisateurConnecte", utilisateurConnecte.getId());
                 return new ModelAndView("redirect:/livre"); // redirige vers page d accueil
             }
         } else {
