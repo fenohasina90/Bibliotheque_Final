@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "emprunt_detail")
 public class EmpruntDetail {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Correspond à SERIAL en PostgreSQL
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,10 +23,10 @@ public class EmpruntDetail {
     @JoinColumn(name = "livre_id")
     private Livre livre;
 
-    @Column(name = "date_debut")
+    @Column(name = "date_debut", nullable = false)
     private LocalDate dateDebut;
 
-    @Column(name = "date_fin")
+    @Column(name = "date_fin", nullable = false)
     private LocalDate dateFin;
 
     @Column(name = "date_retour")

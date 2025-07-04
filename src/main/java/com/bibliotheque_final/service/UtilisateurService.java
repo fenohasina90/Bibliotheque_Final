@@ -2,6 +2,7 @@ package com.bibliotheque_final.service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,10 @@ public class UtilisateurService {
             return utilisateur.get();
         }
         return null;    
+    }
+
+    public List<Utilisateur> getAllUser(){
+        return utilisateurRepository.findAll();
     }
 
 

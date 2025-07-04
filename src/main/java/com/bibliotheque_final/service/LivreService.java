@@ -1,5 +1,6 @@
 package com.bibliotheque_final.service;
 
+import com.bibliotheque_final.entities.Livre;
 import com.bibliotheque_final.projection.LivreProjection;
 import com.bibliotheque_final.repositories.AdherantRepository;
 import com.bibliotheque_final.repositories.LivreRepository;
@@ -31,6 +32,10 @@ public class LivreService {
 
     public Integer getIdAdherant(Integer id){
         return utilisateurRepository.getIdAdherant(id);
+    }
+
+    public List<Livre> getAllLivre() {
+        return livreRepository.findAll();
     }
 
 }
