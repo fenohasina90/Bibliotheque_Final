@@ -59,6 +59,7 @@ public class ReservationService {
         Integer ageLivre = livre.getAge();
 
         return ageLivre <= ageUser;
+
     }
 
     public boolean estDisponible(Integer idLivre, LocalDate dateAReserve){

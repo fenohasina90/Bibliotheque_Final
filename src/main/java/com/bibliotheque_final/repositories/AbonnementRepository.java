@@ -5,8 +5,8 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.util.List;
+
 
 public interface AbonnementRepository extends JpaRepository<Abonnement, Integer> {
 
@@ -26,4 +26,5 @@ public interface AbonnementRepository extends JpaRepository<Abonnement, Integer>
         ORDER BY id ASC 
     """, nativeQuery = true)
     List<Abonnement> findAllByIdUser(@Param("idUser")Integer idUser);
+
 }
