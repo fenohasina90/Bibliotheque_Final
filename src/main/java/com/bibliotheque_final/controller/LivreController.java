@@ -1,5 +1,6 @@
 package com.bibliotheque_final.controller;
 
+import com.bibliotheque_final.entities.Adherant;
 import com.bibliotheque_final.entities.Utilisateur;
 import com.bibliotheque_final.projection.LivreProjection;
 import com.bibliotheque_final.service.LivreService;
@@ -30,8 +31,9 @@ public class LivreController {
             HttpSession session,
             @RequestParam(required = false) String dateStr
     ) {
-        Utilisateur user = (Utilisateur) session.getAttribute("utilisateurConnecte");
-        Integer idAdherant = user.getId();
+
+        Integer idUser = (Integer) session.getAttribute("utilisateurConnecte");;
+        Integer idAdherant =  livreService.getIdAdherant(idUser);
 
         // Conversion de la date si fournie, sinon date du jour
         LocalDate localDate = dateStr != null ? LocalDate.parse(dateStr) : LocalDate.now();

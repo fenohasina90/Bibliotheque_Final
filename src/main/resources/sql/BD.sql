@@ -86,6 +86,18 @@ CREATE TABLE reservation(
     date_debut DATE
 );
 
+CREATE TABLE statut_reservation(
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(50)
+);
+
+CREATE TABLE historique_reservation(
+    id SERIAL PRIMARY KEY,
+    reservation_id INT REFERENCES reservation(id),
+    statut_id INT REFERENCES statut_reservation(id),
+    date_debut DATE DEFAULT CURRENT_DATE
+);
+
 CREATE TABLE genre_livre(
     livre_id INT REFERENCES livre(id),
     genre_id INT REFERENCES genre(id)

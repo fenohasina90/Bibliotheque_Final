@@ -50,7 +50,7 @@ public class UtilisateurController {
                 return new ModelAndView("redirect:/admin");
             } else {
                 
-                session.setAttribute("utilisateurConnecte", utilisateurConnecte);
+                session.setAttribute("utilisateurConnecte", utilisateurConnecte.getId());
                 return new ModelAndView("redirect:/livre"); // redirige vers page d accueil
             }
         } else {
