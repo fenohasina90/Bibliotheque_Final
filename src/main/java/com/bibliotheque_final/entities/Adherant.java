@@ -1,9 +1,6 @@
 package com.bibliotheque_final.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +10,7 @@ import lombok.Setter;
 @Table(name = "adherant")
 public class Adherant {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Correspond à SERIAL en PostgreSQL
     private Integer id;
 
     @Column(name = "type", length = 100)
