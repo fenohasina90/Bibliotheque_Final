@@ -32,7 +32,7 @@ CREATE TABLE livre_adherant(
 
 CREATE TABLE statut_livre(
     id SERIAL PRIMARY KEY,
-    nom VARCHAR(50)
+    nom VARCHAR(50) -- Disponible, Emprunte
 );
 
 CREATE TABLE type_emprunt(
@@ -76,6 +76,8 @@ CREATE TABLE emprunt_detail(
 CREATE TABLE penalite(
     id SERIAL PRIMARY KEY,
     emprunt_id INT REFERENCES emprunt(id),
+    date_debut DATE,
+    date_fin DATE,
     sanction INT 
 );
 
@@ -88,7 +90,7 @@ CREATE TABLE reservation(
 
 CREATE TABLE statut_reservation(
     id SERIAL PRIMARY KEY,
-    nom VARCHAR(50)
+    nom VARCHAR(50) -- En attente, Refusee, Validee, Annuler, Terminee
 );
 
 CREATE TABLE historique_reservation(

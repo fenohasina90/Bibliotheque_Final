@@ -1,6 +1,6 @@
 package com.bibliotheque_final.controller;
 
-import com.bibliotheque_final.entities.Utilisateur;
+import com.bibliotheque_final.service.EmpruntService;
 import com.bibliotheque_final.service.ReservationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,12 @@ import java.time.LocalDate;
 @RequestMapping("/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final EmpruntService empruntService;
     @Autowired
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService,
+                                 EmpruntService empruntService) {
         this.reservationService = reservationService;
+        this.empruntService = empruntService;
     }
 
 
@@ -38,7 +41,7 @@ public class ReservationController {
 
         Integer id_utilisateur = (Integer) session.getAttribute("utilisateurConnecte");
 
-        if (!reservationService.estAbonne(id_utilisateur, dateLivraison)){
+        if (reservationService.estAbonne(id_utilisateur, dateLivraison)){
             mv.addObject("erreur", "Vous n etes pas abonnee");
             return mv;
         } else if (!reservationService.estDisponible(IdLivre, dateLivraison)) {
@@ -47,10 +50,22 @@ public class ReservationController {
         } else if (!reservationService.valideAgeLivre(id_utilisateur, IdLivre)) {
             mv.addObject("erreur", "Ce livre n est pas pour votre age");
             return mv;
+        } else if (!empruntService.verifierPenalite(id_utilisateur, dateLivraison, dateLivraison)) {
+            mv.addObject("erreur", "Vous avez une penalite en cours");
+            return mv;
         }
 
         mv.addObject("success", "Reservation en attente");
         reservationService.save(id_utilisateur, IdLivre, dateLivraison);
         return mv;
+    }
+
+        // Cote ADMIN
+    @PostMapping("/annulerstatut")
+    public ModelAndView annulerReservation(
+            @RequestParam("idReservation") Integer idReservation
+    ){
+        reservationService.changerStatutReservation(idReservation, 4);
+        return new ModelAndView("redirect:/user/reservation");
     }
 }

@@ -60,6 +60,9 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Créer l'emprunt</button>
+        <a href="/emprunts">
+            <button type="button" class="btn btn-secondary">Annuler</button>
+        </a>
     </form>
 </div>
 

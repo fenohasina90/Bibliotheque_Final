@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/livre")
+@RequestMapping("/user")
 public class LivreController {
     private final LivreService livreService;
     @Autowired
@@ -26,7 +26,7 @@ public class LivreController {
         this.livreService = livreService;
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public ModelAndView afficherLivre(
             HttpSession session,
             @RequestParam(required = false) String dateStr

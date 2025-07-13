@@ -2,6 +2,7 @@ package com.bibliotheque_final.repositories;
 
 import com.bibliotheque_final.entities.Emprunt;
 import com.bibliotheque_final.entities.EmpruntDetail;
+import com.bibliotheque_final.entities.Utilisateur;
 import com.bibliotheque_final.projection.LivreProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -62,6 +63,11 @@ public interface EmpruntRepository extends JpaRepository<Emprunt, Integer> {
         AND date_debut = :dateDonne
     """, nativeQuery = true)
     Integer getReservationLivreDisponibility(@Param("dateDonne") LocalDate dateDonne, @Param("idLivre") Integer idLivre);
+
+    @Query("""
+    SELECT e.utilisateur FROM Emprunt e WHERE e.id = :idEmprunt
+    """)
+    Utilisateur getUtilisateurEmprunt(@Param("idEmprunt") Integer idEmprunt);
 
 //    List<Emprunt> findByUtilisateurIdAndDateFinBeforeAndDateRetourIsNull(Integer utilisateurId, LocalDate date);
 //    Integer countByUtilisateurIdAndDateFinAfter(Integer utilisateurId, LocalDate date);

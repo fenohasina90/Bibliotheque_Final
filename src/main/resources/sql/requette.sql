@@ -103,4 +103,92 @@ FROM reservation
 WHERE livre_id = 1
 AND date_debut = '2025-01-01';    
 
+-- liste reservation cote admin
+
+
+select u.nom nom, l.titre titre, r.date_debut date_reservation, his.reservation_id reservation, his.date_debut date_mAJ , st.nom statut 
+from historique_reservation his
+join (select MAX(hr.id) id, t.id id_res from historique_reservation hr 
+join (select id from reservation) t on t.id = hr.reservation_id
+group by t.id) tab on his.id = tab.id
+join reservation r on r.id = his.reservation_id
+join utilisateur u on u.id = r.utilisateur_id
+join livre l on l.id = r.livre_id
+join statut_reservation st on his.statut_id = st.id
+order by r.id desc;
+
+
+
+-- liste reservation cote client
+select u.nom nom, l.titre titre, r.date_debut date_reservation, st.nom statut,
+hr.date_debut date_statut 
+from reservation r
+join historique_reservation hr on hr.reservation_id = r.id
+join utilisateur u on u.id = r.utilisateur_id
+join livre l on l.id = r.livre_id
+join statut_reservation st on hr.statut_id = st.id
+where u.id = ?;
+
+(select MAX(hr.id) id, t.id id_res from historique_reservation hr 
+join (select id from reservation) t on t.id = hr.reservation_id
+group by t.id) tab;
+
+
+-- penalite
+select u.id utilisateur, count(u.id) nombre_penalite from emprunt_detail ed
+join emprunt e on e.id = ed.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where (ed.date_fin < CURRENT_DATE and ed.date_retour is null) or ed.date_retour > ed.date_fin
+group by u.id;
+
+
+select e.id emprunt_nahazona_penalite from emprunt_detail ed
+join emprunt e on e.id = ed.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where ((ed.date_fin < CURRENT_DATE and ed.date_retour is null) or ed.date_retour > ed.date_fin) and u.id = 3
+group by e.id;
+
+select MAX(ed.date_fin) debut_de_penalite from emprunt_detail ed
+join emprunt e on e.id = ed.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where u.id = 3;
+
+select ed.date_fin debut_de_penalite from emprunt_detail ed
+join emprunt e on e.id = ed.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where u.id = 3;
+
+-- penalite d un utilisateur
+select p.* from penalite p
+join emprunt e on e.id = p.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where u.id = 3;
+
+
+select MAX(p.date_fin) date_fin from penalite p 
+join emprunt e on e.id = p.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where u.id = 6
+
+select MAX(a.id) id, t.utilisateur_id
+from abonnement a
+join (select distinct utilisateur_id from abonnement) t on t.utilisateur_id = a.utilisateur_id
+group by t.utilisateur_id;
+
+-- liste abonnement cote admin
+select u.nom || ' ' ||u.prenom as nom, u.email as email, ab.date_debut as dateDebut, ab.date_fin as dateFin
+from abonnement ab
+join (select MAX(a.id) id, t.utilisateur_id
+from abonnement a
+join (select distinct utilisateur_id from abonnement) t on t.utilisateur_id = a.utilisateur_id
+group by t.utilisateur_id) tab on tab.id = ab.id
+full outer join utilisateur u on ab.utilisateur_id = u.id;
+
+
+SELECT *
+FROM abonnement
+WHERE utilisateur_id = 3 AND (date_debut <= '2025-08-15' AND date_fin >= '2025-08-15') 
+AND (date_debut <= '2025-08-18' AND date_fin >= '2025-08-18')
+ORDER BY date_debut DESC
+
 

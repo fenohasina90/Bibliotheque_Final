@@ -70,12 +70,12 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="/admin">
+            <a class="nav-link" href="/admin">
                 <i class="fas fa-id-card"></i> Abonnements
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/reservation">
+            <a class="nav-link active" href="/admin/reservation">
                 <i class="fas fa-calendar-check"></i> Réservations
             </a>
         </li>
@@ -106,10 +106,7 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Gestion des Abonnements</h2>
-            <button class="btn btn-primary">
-                <i class="fas fa-plus"></i> Ajouter
-            </button>
+            <h2>Gestion des Réservations</h2>
         </div>
 
         <div class="card shadow-sm">
@@ -118,42 +115,63 @@
                     <table class="table table-hover">
                         <thead class="table-light">
                         <tr>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Date début</th>
-                            <th>Date fin</th>
+                            <th>Nom Utilisateur</th>
+                            <th>Titre livre</th>
+                            <th>Date Reservation</th>
                             <th>Statut</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${listes}" var="liste">
+                        <c:forEach var="reservation" items="${listes}">
                             <tr>
-                                <td>${liste.nom}</td>
-                                <td>${liste.email}</td>
-                                <td>${liste.dateDebut}</td>
-                                <td>${liste.dateFin}</td>
+                                <td>${reservation.nom}</td>
+                                <td>${reservation.titre}</td>
+                                <td>${reservation.dateReservation}</td>
                                 <td>
-                                    <c:choose>
-                                        <c:when test="${empty liste.dateDebut or empty liste.dateFin}">
-                                            <span class="badge bg-danger">Inactif</span>
-                                        </c:when>
-                                        <c:when test="${liste.dateDebut <= today and liste.dateFin >= today}">
-                                            <span class="badge bg-success">Actif</span>
-                                        </c:when>
-                                        <c:when test="${liste.dateFin < today}">
-                                            <span class="badge bg-warning">Expirée</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="badge bg-secondary">À venir</span>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <span class="badge ${reservation.statut == 'En attente' ? 'bg-warning' : 
+                                                       reservation.statut == 'Validee' ? 'bg-success' :
+                                                       reservation.statut == 'Refusee' ? 'bg-danger' :
+                                                       reservation.statut == 'Terminee' ? 'bg-info' : 'bg-secondary'}">
+                                        ${reservation.statut}
+                                    </span>
+                                </td>
+                                <td>
+                                    <!-- Action Historique (toujours disponible) -->
+                                    <button class="btn btn-sm btn-outline-info" title="Historique">
+                                        <i class="fas fa-history"></i>
+                                    </button>
+                                    
+                                    <!-- Action Annuler (seulement si statut = Validé ou En attente) -->
+                                    <c:if test="${reservation.statut == 'Validé' || reservation.statut == 'En attente'}">
+                                        <form method="post" action="/admin/reservation/terminerstatut" style="display: inline;">
+                                            <input type="hidden" name="idReservation" value="${reservation.id}">
+                                            <button type="submit" class="btn btn-sm btn-outline-warning" title="Annuler" 
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </c:if>
+                                    
+                                    <!-- Actions Valider/Refuser (seulement si statut = En attente) -->
+                                    <c:if test="${reservation.statut == 'En attente'}">
+                                        <form method="post" action="/admin/reservation/validestatut" style="display: inline;">
+                                            <input type="hidden" name="idReservation" value="${reservation.id}">
+                                            <button type="submit" class="btn btn-sm btn-outline-success" title="Valider">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                        
+                                        <form method="post" action="/admin/reservation/refuserstatut" style="display: inline;">
+                                            <input type="hidden" name="idReservation" value="${reservation.id}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Refuser">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        </form>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
-
-
-
-                        <!-- Ajoutez d'autres lignes selon vos besoins -->
                         </tbody>
                     </table>
                 </div>

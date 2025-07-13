@@ -1,13 +1,17 @@
 package com.bibliotheque_final.service;
 
 import com.bibliotheque_final.entities.*;
+import com.bibliotheque_final.projection.ReservationProjection;
 import com.bibliotheque_final.repositories.*;
 import com.bibliotheque_final.repositories.StatutReservationRepository;
+import com.bibliotheque_final.dto.ReservationAdminDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -35,18 +39,7 @@ public class ReservationService {
     }
 
     public boolean estAbonne(Integer idUser, LocalDate dateAReserve) {
-        Abonnement abonnement = abonnementRepository.dernierAbonnementUser(idUser);
-        if (abonnement == null) {
-            return false;
-        }
-
-        LocalDate dateDebut = abonnement.getDateDebut();
-        LocalDate dateFin = abonnement.getDateFin();
-        LocalDate actuel = LocalDate.now();
-
-        return isDateBetweenInclusiveAlt(dateAReserve, dateDebut, dateFin) &&
-                isDateBetweenInclusiveAlt(actuel, dateDebut, dateFin) &&
-                dateAReserve.isAfter(actuel);
+        return abonnementRepository.dernierAbonnementUser(idUser, dateAReserve, dateAReserve).isEmpty();
     }
 
     public boolean valideAgeLivre(Integer idUser, Integer idlivre) {
@@ -90,4 +83,30 @@ public class ReservationService {
         historiqueReservationRepository.save(historiqueReservation);
 
     }
+
+    /*
+    * Valider reservation id statut = 3
+    * Refuser reservation id statut = 2
+    * Annuler reservation id statut = 4
+    * Terminer reservation id statut = 5
+    * */
+    public void changerStatutReservation(Integer idReservation, Integer idStatut) {
+        Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
+        StatutReservation statutReservation = statutReservationRepository.findById(idStatut).orElse(null);
+
+        HistoriqueReservation historiqueReservation = new HistoriqueReservation();
+        historiqueReservation.setDateDebut(LocalDate.now());
+        historiqueReservation.setStatut(statutReservation);
+        historiqueReservation.setReservation(reservation);
+
+        historiqueReservationRepository.save(historiqueReservation);
+    }
+
+    public List<ReservationProjection> getListeReservationAdmin() {
+        return reservationRepository.getlisteReservationAdmin();
+    }
+
+
+
+
 }
