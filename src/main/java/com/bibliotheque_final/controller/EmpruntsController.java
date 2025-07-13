@@ -132,7 +132,7 @@ public class EmpruntsController {
         ModelAndView mv = new ModelAndView("redirect:/emprunts");
 
         empruntService.retournerEmprunt(id, dateRetour);
-        
+
         return mv;
     }
 }
