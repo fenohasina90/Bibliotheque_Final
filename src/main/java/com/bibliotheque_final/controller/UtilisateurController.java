@@ -26,18 +26,6 @@ public class UtilisateurController {
         return mv;
     }
 
-    @GetMapping("/accueil")
-    public ModelAndView home (){
-        ModelAndView mv = new ModelAndView("livre/listeLivres");
-        return mv;
-    }
-
-    @GetMapping("/admin")
-    public ModelAndView homeAdmin (){
-        ModelAndView mv = new ModelAndView("admin/home");
-        return mv;
-    }
-
     @PostMapping("/login")
     public ModelAndView validationlogin(@RequestParam("email") String email,
                                         @RequestParam("password") String password,
@@ -51,7 +39,7 @@ public class UtilisateurController {
             } else {
 
                 session.setAttribute("utilisateurConnecte", utilisateurConnecte.getId());
-                return new ModelAndView("redirect:/livre"); // redirige vers page d accueil
+                return new ModelAndView("redirect:/user"); // redirige vers page d accueil
             }
         } else {
             // Authentification echouee : on retourne au formulaire avec message d'erreur

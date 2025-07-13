@@ -60,8 +60,29 @@ INSERT INTO statut_reservation (nom) VALUES
 ('Terminee');
 
 INSERT INTO reservation (utilisateur_id, livre_id, date_debut) VALUES
-(1, 1, '2025-01-01'),
-(2, 1, '2025-01-01'),
-(3, 1, '2025-01-01'),
-(1, 2, '2025-07-04'),
-(4, 4, '2025-07-05');
+(1, 1, '2025-08-01'), ---9
+(2, 1, '2025-07-11'), --10
+(3, 1, '2025-07-09'), --11
+(1, 2, '2025-07-14'), --12
+(4, 4, '2025-07-15'); --13
+
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (9, 1, '2025-07-05');
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (9, 3, '2025-07-06');
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (9, 5, '2025-08-01');
+
+
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (10, 1, '2025-07-05');
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (10, 3, '2025-07-05');
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (10, 5, '2025-07-11');
+
+
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (11, 3, '2025-07-05');
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (11, 3, '2025-07-05');
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (11, 4, '2025-07-07');
+
+
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (12, 1, '2025-07-05');
+
+
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (13, 1, '2025-07-05');
+INSERT INTO historique_reservation (reservation_id, statut_id, date_debut) VALUES (13, 2, '2025-07-05');

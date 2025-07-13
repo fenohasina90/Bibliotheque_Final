@@ -8,7 +8,6 @@
     <title>Tableau de bord Admin</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/all.min.css">
-    <title>Liste des prêts</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -55,12 +54,9 @@
             height: 40px;
             margin-right: 10px;
         }
-        .retard { color: red; }
     </style>
 </head>
-
 <body>
-
 <!-- Sidebar -->
 <div class="sidebar">
     <div class="sidebar-header d-flex align-items-center">
@@ -79,12 +75,12 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/reservation">
+            <a class="nav-link active" href="/admin/reservation">
                 <i class="fas fa-calendar-check"></i> Réservations
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="/emprunts/">
+            <a class="nav-link" href="/emprunts/">
                 <i class="fas fa-book"></i> Prêts
             </a>
         </li>
@@ -105,16 +101,12 @@
         </li>
     </ul>
 </div>
+
+<!-- Main Content -->
 <div class="main-content">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Liste des prêts en cours</h2>
-            <a href="/emprunts/creer">
-                <button class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Ajouter
-                </button>
-            </a>
-
+            <h2>Gestion des Réservations</h2>
         </div>
 
         <div class="card shadow-sm">
@@ -123,39 +115,63 @@
                     <table class="table table-hover">
                         <thead class="table-light">
                         <tr>
-                            <th>Utilisateur</th>
-                            <th>Livre</th>
-                            <th>Type emprunt</th>
-                            <th>Date début</th>
-                            <th>Date fin</th>
+                            <th>Nom Utilisateur</th>
+                            <th>Titre livre</th>
+                            <th>Date Reservation</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${emprunts}" var="emprunt">
+                        <c:forEach var="reservation" items="${listes}">
                             <tr>
-                                <td>${emprunt.emprunt.utilisateur.nom}</td>
-                                <td>${emprunt.livre.titre}</td>
-                                <td>${emprunt.typeEmprunt.nom}</td>
-                                <td>${emprunt.dateDebut}</td>
-                                <td>${emprunt.dateFin}</td>
+                                <td>${reservation.nom}</td>
+                                <td>${reservation.titre}</td>
+                                <td>${reservation.dateReservation}</td>
                                 <td>
-                                    <c:choose>
-                                        <c:when test="${emprunt.dateFin.isBefore(today)}">
-                                            <span class="retard">En retard</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            En cours
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <span class="badge ${reservation.statut == 'En attente' ? 'bg-warning' : 
+                                                       reservation.statut == 'Validé' ? 'bg-success' : 
+                                                       reservation.statut == 'Refusé' ? 'bg-danger' : 
+                                                       reservation.statut == 'Terminé' ? 'bg-info' : 'bg-secondary'}">
+                                        ${reservation.statut}
+                                    </span>
                                 </td>
                                 <td>
-                                    <a href="/emprunts/retour/${emprunt.id}">Rendre</a>
+                                    <!-- Action Historique (toujours disponible) -->
+                                    <button class="btn btn-sm btn-outline-info" title="Historique">
+                                        <i class="fas fa-history"></i>
+                                    </button>
+                                    
+                                    <!-- Action Annuler (seulement si statut = Validé ou En attente) -->
+                                    <c:if test="${reservation.statut == 'Validé' || reservation.statut == 'En attente'}">
+                                        <form method="post" action="/admin/reservation/terminerstatut" style="display: inline;">
+                                            <input type="hidden" name="idReservation" value="${reservation.id}">
+                                            <button type="submit" class="btn btn-sm btn-outline-warning" title="Annuler" 
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </c:if>
+                                    
+                                    <!-- Actions Valider/Refuser (seulement si statut = En attente) -->
+                                    <c:if test="${reservation.statut == 'En attente'}">
+                                        <form method="post" action="/admin/reservation/validestatut" style="display: inline;">
+                                            <input type="hidden" name="idReservation" value="${reservation.id}">
+                                            <button type="submit" class="btn btn-sm btn-outline-success" title="Valider">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                        
+                                        <form method="post" action="/admin/reservation/refuserstatut" style="display: inline;">
+                                            <input type="hidden" name="idReservation" value="${reservation.id}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Refuser">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        </form>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
-                        <!-- Ajoutez d'autres lignes selon vos besoins -->
                         </tbody>
                     </table>
                 </div>

@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Livres Disponibles - Bibliothèque</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -610,7 +610,7 @@
     </div>
 
     <div class="search-section">
-        <form method="get" action="/livre" class="search-form">
+        <form method="get" action="/user" class="search-form">
             <input type="hidden" name="idAdherant" value="${idAdherant}"/>
             <div class="form-group">
                 <label for="date"><i class="fas fa-calendar"></i> Changer la date de recherche</label>
@@ -685,7 +685,7 @@
                                                         Réserver
                                                     </button>
                                                 </form>
-                                                <form method="post" action="/livre/emprunter" style="flex: 1;">
+                                                <form method="post" action="/user/emprunter" style="flex: 1;">
                                                     <input type="hidden" name="livreId" value="${livre.livreId}"/>
                                                     <input type="hidden" name="idAdherant" value="${idAdherant}"/>
                                                     <button type="submit" class="btn btn-borrow btn-icon">

@@ -53,4 +53,13 @@ public class ReservationController {
         reservationService.save(id_utilisateur, IdLivre, dateLivraison);
         return mv;
     }
+
+        // Cote ADMIN
+    @PostMapping("/annulerstatut")
+    public ModelAndView annulerReservation(
+            @RequestParam("idReservation") Integer idReservation
+    ){
+        reservationService.changerStatutReservation(idReservation, 4);
+        return new ModelAndView("redirect:/user/reservation");
+    }
 }

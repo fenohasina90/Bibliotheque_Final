@@ -171,7 +171,7 @@ public class EmpruntService {
         EmpruntDetail empruntDetail = empruntDetailRepository.findById(idEmpruntDetail).orElse(null);
         if (empruntDetail != null) {
             empruntDetail.setDateRetour(dateRetour);
-            empruntDetailRepository.save(empruntDetail);
+            empruntDetail = empruntDetailRepository.save(empruntDetail);
 
             // Mettre à jour l'historique du livre
             StatutLivre statutDisponible = statutLivreRepository.findById(1).orElse(null); // ID 1 = Disponible

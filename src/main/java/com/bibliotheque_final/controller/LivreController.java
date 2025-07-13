@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/livre")
+@RequestMapping("/user")
 public class LivreController {
     private final LivreService livreService;
     @Autowired

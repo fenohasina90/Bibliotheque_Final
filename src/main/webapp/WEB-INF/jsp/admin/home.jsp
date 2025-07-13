@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -69,17 +69,17 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="#abonnements">
+            <a class="nav-link active" href="/admin">
                 <i class="fas fa-id-card"></i> Abonnements
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#reservations">
+            <a class="nav-link" href="/admin/reservation">
                 <i class="fas fa-calendar-check"></i> Réservations
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#prets">
+            <a class="nav-link" href="/emprunts/">
                 <i class="fas fa-book"></i> Prêts
             </a>
         </li>
@@ -150,7 +150,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
 <script>
     // Script pour gérer l'état actif des liens
     document.querySelectorAll('.nav-link').forEach(link => {

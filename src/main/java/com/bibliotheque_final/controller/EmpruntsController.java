@@ -71,6 +71,10 @@ public class EmpruntsController {
         );
     }
 
+
+
+
+//    retourr  --------------------------------------------------------------
     @PostMapping("/creer")
     public ModelAndView creerEmprunt(@ModelAttribute EmpruntForm empruntForm) {
         try {
@@ -87,11 +91,7 @@ public class EmpruntsController {
         }
     }
 
-
-//    retourr  --------------------------------------------------------------
-
-
-    @GetMapping("/liste")
+    @GetMapping("/")
     public ModelAndView listePrets() {
         ModelAndView mv = new ModelAndView("emprunt/liste");
         List<EmpruntDetail> emprunts = empruntDetailRepository.findAllByDateRetourIsNull();
@@ -125,28 +125,14 @@ public class EmpruntsController {
     }
 
     @PostMapping("/retour/{id}")
-    public String enregistrerRetour(
+    public ModelAndView enregistrerRetour(
             @PathVariable Integer id,
-            @RequestParam LocalDate dateRetour,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam LocalDate dateRetour) {
 
-        EmpruntDetail emprunt = empruntDetailRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Emprunt non trouvé"));
+        ModelAndView mv = new ModelAndView("redirect:/emprunts");
 
-        emprunt.setDateRetour(dateRetour);
-        empruntDetailRepository.save(emprunt);
-
-        // Mettre à jour l'historique du livre
-        StatutLivre statutDisponible = statutLivreRepository.findById(1) // 1 = Disponible
-                .orElseThrow(() -> new RuntimeException("Statut non trouvé"));
-
-        HistoriqueLivre historique = new HistoriqueLivre();
-        historique.setLivre(emprunt.getLivre());
-        historique.setStatut(statutDisponible);
-        historique.setDateDebut(dateRetour);
-        historiqueLivreRepository.save(historique);
-
-        redirectAttributes.addFlashAttribute("success", "Retour enregistré avec succès");
-        return "redirect:/emprunts/liste";
+        empruntService.retournerEmprunt(id, dateRetour);
+        
+        return mv;
     }
 }

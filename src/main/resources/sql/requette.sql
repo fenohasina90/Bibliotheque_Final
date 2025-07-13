@@ -103,4 +103,33 @@ FROM reservation
 WHERE livre_id = 1
 AND date_debut = '2025-01-01';    
 
+-- liste reservation cote admin
+
+
+select u.nom nom, l.titre titre, r.date_debut date_reservation, his.reservation_id reservation, his.date_debut date_mAJ , st.nom statut 
+from historique_reservation his
+join (select MAX(hr.id) id, t.id id_res from historique_reservation hr 
+join (select id from reservation) t on t.id = hr.reservation_id
+group by t.id) tab on his.id = tab.id
+join reservation r on r.id = his.reservation_id
+join utilisateur u on u.id = r.utilisateur_id
+join livre l on l.id = r.livre_id
+join statut_reservation st on his.statut_id = st.id
+order by r.id desc;
+
+
+
+-- liste reservation cote client
+select u.nom nom, l.titre titre, r.date_debut date_reservation, st.nom statut,
+hr.date_debut date_statut 
+from reservation r
+join historique_reservation hr on hr.reservation_id = r.id
+join utilisateur u on u.id = r.utilisateur_id
+join livre l on l.id = r.livre_id
+join statut_reservation st on hr.statut_id = st.id
+where u.id = ?;
+
+(select MAX(hr.id) id, t.id id_res from historique_reservation hr 
+join (select id from reservation) t on t.id = hr.reservation_id
+group by t.id) tab;
 
