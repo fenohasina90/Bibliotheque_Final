@@ -26,7 +26,7 @@ public class LivreController {
         this.livreService = livreService;
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public ModelAndView afficherLivre(
             HttpSession session,
             @RequestParam(required = false) String dateStr

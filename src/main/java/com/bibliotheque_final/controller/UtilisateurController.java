@@ -39,7 +39,7 @@ public class UtilisateurController {
             } else {
 
                 session.setAttribute("utilisateurConnecte", utilisateurConnecte.getId());
-                return new ModelAndView("redirect:/user"); // redirige vers page d accueil
+                return new ModelAndView("redirect:/user/"); // redirige vers page d accueil
             }
         } else {
             // Authentification echouee : on retourne au formulaire avec message d'erreur

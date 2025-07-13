@@ -80,7 +80,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/emprunts/">
+            <a class="nav-link" href="/emprunts">
                 <i class="fas fa-book"></i> Prêts
             </a>
         </li>
@@ -130,9 +130,9 @@
                                 <td>${reservation.dateReservation}</td>
                                 <td>
                                     <span class="badge ${reservation.statut == 'En attente' ? 'bg-warning' : 
-                                                       reservation.statut == 'Validé' ? 'bg-success' : 
-                                                       reservation.statut == 'Refusé' ? 'bg-danger' : 
-                                                       reservation.statut == 'Terminé' ? 'bg-info' : 'bg-secondary'}">
+                                                       reservation.statut == 'Validee' ? 'bg-success' :
+                                                       reservation.statut == 'Refusee' ? 'bg-danger' :
+                                                       reservation.statut == 'Terminee' ? 'bg-info' : 'bg-secondary'}">
                                         ${reservation.statut}
                                     </span>
                                 </td>

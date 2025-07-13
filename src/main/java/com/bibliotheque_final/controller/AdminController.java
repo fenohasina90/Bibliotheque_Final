@@ -7,6 +7,8 @@ import com.bibliotheque_final.service.UtilisateurService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -27,6 +29,7 @@ public class AdminController {
     @GetMapping("")
     public ModelAndView homeAdmin (){
         ModelAndView mv = new ModelAndView("admin/home");
+        mv.addObject("listes", abonnementService.getlisteAbonnement());
         return mv;
     }
 
@@ -41,6 +44,7 @@ public class AdminController {
     public ModelAndView listeReservation(){
         ModelAndView mv = new ModelAndView("admin/reservation");
         mv.addObject("listes", reservationService.getListeReservationAdmin());
+        mv.addObject("today", LocalDate.now());
         return mv;
     }
 

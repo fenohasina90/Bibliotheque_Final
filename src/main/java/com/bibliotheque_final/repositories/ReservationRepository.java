@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
     @Query(value = """
-        select r.id as id, u.nom as nom, l.titre as titre, r.date_debut as dateReservation, st.nom as statut, 
+        select r.id as id, u.nom ||' '||u.prenom as nom, l.titre as titre, r.date_debut as dateReservation, st.nom as statut, 
         his.date_debut as majStatut 
         from reservation r
         join utilisateur u on u.id = r.utilisateur_id

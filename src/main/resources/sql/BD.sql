@@ -76,6 +76,8 @@ CREATE TABLE emprunt_detail(
 CREATE TABLE penalite(
     id SERIAL PRIMARY KEY,
     emprunt_id INT REFERENCES emprunt(id),
+    date_debut DATE,
+    date_fin DATE,
     sanction INT 
 );
 

@@ -2,6 +2,7 @@ package com.bibliotheque_final.service;
 
 import com.bibliotheque_final.entities.Abonnement;
 import com.bibliotheque_final.entities.Utilisateur;
+import com.bibliotheque_final.projection.AbonnementProjection;
 import com.bibliotheque_final.repositories.AbonnementRepository;
 import com.bibliotheque_final.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ public class AbonnementService {
         abonnement.setDateDebut(dateDebut);
         abonnement.setDateFin(dateFin);
         abonnementRepository.save(abonnement);
+    }
+
+    public List<AbonnementProjection> getlisteAbonnement(){
+        return abonnementRepository.getlisteAbonnement();
     }
 
     public List<Abonnement> getListeAbonnementUser(Integer idUser){

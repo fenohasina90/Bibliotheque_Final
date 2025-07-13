@@ -133,3 +133,62 @@ where u.id = ?;
 join (select id from reservation) t on t.id = hr.reservation_id
 group by t.id) tab;
 
+
+-- penalite
+select u.id utilisateur, count(u.id) nombre_penalite from emprunt_detail ed
+join emprunt e on e.id = ed.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where (ed.date_fin < CURRENT_DATE and ed.date_retour is null) or ed.date_retour > ed.date_fin
+group by u.id;
+
+
+select e.id emprunt_nahazona_penalite from emprunt_detail ed
+join emprunt e on e.id = ed.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where ((ed.date_fin < CURRENT_DATE and ed.date_retour is null) or ed.date_retour > ed.date_fin) and u.id = 3
+group by e.id;
+
+select MAX(ed.date_fin) debut_de_penalite from emprunt_detail ed
+join emprunt e on e.id = ed.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where u.id = 3;
+
+select ed.date_fin debut_de_penalite from emprunt_detail ed
+join emprunt e on e.id = ed.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where u.id = 3;
+
+-- penalite d un utilisateur
+select p.* from penalite p
+join emprunt e on e.id = p.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where u.id = 3;
+
+
+select MAX(p.date_fin) date_fin from penalite p 
+join emprunt e on e.id = p.emprunt_id
+join utilisateur u on u.id = e.utilisateur_id
+where u.id = 6
+
+select MAX(a.id) id, t.utilisateur_id
+from abonnement a
+join (select distinct utilisateur_id from abonnement) t on t.utilisateur_id = a.utilisateur_id
+group by t.utilisateur_id;
+
+-- liste abonnement cote admin
+select u.nom || ' ' ||u.prenom as nom, u.email as email, ab.date_debut as dateDebut, ab.date_fin as dateFin
+from abonnement ab
+join (select MAX(a.id) id, t.utilisateur_id
+from abonnement a
+join (select distinct utilisateur_id from abonnement) t on t.utilisateur_id = a.utilisateur_id
+group by t.utilisateur_id) tab on tab.id = ab.id
+full outer join utilisateur u on ab.utilisateur_id = u.id;
+
+
+SELECT *
+FROM abonnement
+WHERE utilisateur_id = 3 AND (date_debut <= '2025-08-15' AND date_fin >= '2025-08-15') 
+AND (date_debut <= '2025-08-18' AND date_fin >= '2025-08-18')
+ORDER BY date_debut DESC
+
+

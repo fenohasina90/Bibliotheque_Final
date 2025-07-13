@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/abonnement")
+@RequestMapping("/user/abonnement")
 public class AbonnementController {
     private final AbonnementService abonnementService;
 
@@ -18,13 +18,7 @@ public class AbonnementController {
     public AbonnementController(AbonnementService abonnementService) {
         this.abonnementService = abonnementService;
     }
-    @GetMapping("")
-    public ModelAndView showAbonnement(HttpSession session){
-        Integer idUser = (Integer) session.getAttribute("utilisateurConnecte");
-        ModelAndView mv = new ModelAndView("abonnement/abonnement");
-        mv.addObject("listes", abonnementService.getListeAbonnementUser(idUser));
-        return mv;
-    }
+
 
     @GetMapping("/form")
     public ModelAndView showForm(){

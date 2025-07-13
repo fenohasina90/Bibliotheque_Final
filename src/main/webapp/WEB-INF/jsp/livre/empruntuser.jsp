@@ -6,9 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Abonnements - Bibliothèque</title>
+    <title>Liste des Pret - Bibliothèque</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="/css/abonnement.css" rel="stylesheet">
+    <link href="/css/empruntuser.css" rel="stylesheet">
 </head>
 <body>
 <!-- Navbar -->
@@ -58,22 +58,13 @@
 
 <div class="container">
     <div class="header">
-        <h1><i class="fas fa-id-card"></i> Mes Abonnements</h1>
-        <p class="subtitle">Consultez vos abonnements à la bibliothèque</p>
-    </div>
-
-    <!-- Statistiques - Calculées dynamiquement -->
-    <div class="stats-bar">
-        <c:set var="actifsCount" value="0"/>
-        <c:set var="expiresCount" value="0"/>
-        <c:set var="expireBientotCount" value="0"/>
-        <c:set var="totalCount" value="${not empty listes ? listes.size() : 0}"/>
-
+        <h1><i class="fas fa-id-card"></i> Mes Pret</h1>
+        <p class="subtitle">Consultez vos pret à la bibliothèque</p>
     </div>
 
     <!-- Filtres -->
     <div class="filter-section">
-        <form method="get" action="/abonnement" class="filter-form">
+        <form method="get" action="/user/emprunt" class="filter-form">
             <div class="form-group">
                 <label for="dateDebut"><i class="fas fa-calendar-alt"></i> Date Début</label>
                 <input type="date" name="dateDebut" id="dateDebut" class="form-control" value="${param.dateDebut}"/>
@@ -85,9 +76,7 @@
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-search"></i> Filtrer
             </button>
-            <a href="/abonnement/form" class="btn btn-success">
-                <i class="fas fa-plus"></i> Nouvel Abonnement
-            </a>
+
         </form>
     </div>
 
@@ -95,7 +84,7 @@
     <c:if test="${not empty listes}">
         <div class="abonnements-count">
             <i class="fas fa-id-card"></i>
-                ${listes.size()} abonnement(s) trouvé(s)
+                ${listes.size()} pret(s) trouvé(s)
         </div>
     </c:if>
 
@@ -103,61 +92,49 @@
     <div class="abonnements-container">
         <c:choose>
             <c:when test="${not empty listes}">
-                <div class="abonnements-table">
-                    <div class="table-header">
-                        <div class="table-row">
-                            <div>ID</div>
-                            <div>Utilisateur</div>
-                            <div>Date Début</div>
-                            <div>Date Fin</div>
-                            <div>Actions</div>
-                        </div>
-                    </div>
-
+                <table class="abonnements-table table table-striped">
+                    <thead class="table-header">
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Date Début</th>
+                        <th>Date Fin</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <c:forEach items="${listes}" var="abonnement">
-                        <div class="table-row">
-                            <div class="subscription-id">#${abonnement.id}</div>
-
-                            <div class="user-info">
-                                <div class="user-avatar">
+                        <tr class="table-row">
+                            <td class="user-details">
+                                <h4>
                                     <c:choose>
-                                        <c:when test="${not empty abonnement.utilisateur.prenom and not empty abonnement.utilisateur.nom}">
-                                            ${abonnement.utilisateur.prenom.substring(0,1)}${abonnement.utilisateur.nom.substring(0,1)}
+                                        <c:when test="${not empty abonnement.emprunt.utilisateur.prenom and not empty abonnement.emprunt.utilisateur.nom}">
+                                            ${abonnement.emprunt.utilisateur.prenom} ${abonnement.emprunt.utilisateur.nom}
                                         </c:when>
                                         <c:otherwise>
-                                            <i class="fas fa-user"></i>
+                                            Utilisateur inconnu
                                         </c:otherwise>
                                     </c:choose>
-                                </div>
-                                <div class="user-details">
-                                    <h4>
-                                        <c:choose>
-                                            <c:when test="${not empty abonnement.utilisateur.prenom and not empty abonnement.utilisateur.nom}">
-                                                ${abonnement.utilisateur.prenom} ${abonnement.utilisateur.nom}
-                                            </c:when>
-                                            <c:otherwise>
-                                                Utilisateur inconnu
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </h4>
-                                    <p>ID: ${abonnement.utilisateur.nom}</p>
-                                </div>
-                            </div>
-
-                            <div class="date-info">
+                                </h4>
+                            </td>
+                            <td class="date-info">
                                 <div class="date-value">
-                                        ${abonnement.dateDebut.toString()} <!-- Affichera "2025-07-04" -->
+                                        ${abonnement.dateDebut.toString()}
                                 </div>
-                            </div>
-                            <div class="date-info">
-                            <div class="date-value">
-                                    ${abonnement.dateFin.toString()} <!-- Affichera "2025-07-04" -->
-                            </div>
-                        </div>
-
-                        </div>
+                            </td>
+                            <td class="date-info">
+                                <div class="date-value">
+                                        ${abonnement.dateFin.toString()}
+                                </div>
+                            </td>
+                            <td class="actions">
+                                <a href="/abonnement/prolonger?id=${abonnement.id}" class="btn btn-primary">
+                                    <i class="fas fa-calendar-plus"></i> Prolonger
+                                </a>
+                            </td>
+                        </tr>
                     </c:forEach>
-                </div>
+                    </tbody>
+                </table>
             </c:when>
             <c:otherwise>
                 <div class="empty-state">

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -79,7 +80,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/emprunts/">
+            <a class="nav-link" href="/emprunts">
                 <i class="fas fa-book"></i> Prêts
             </a>
         </li>
@@ -117,30 +118,41 @@
                     <table class="table table-hover">
                         <thead class="table-light">
                         <tr>
-                            <th>ID</th>
                             <th>Nom</th>
                             <th>Email</th>
-                            <th>Type</th>
                             <th>Date début</th>
                             <th>Date fin</th>
                             <th>Statut</th>
-                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Jean Dupont</td>
-                            <td>jean.dupont@example.com</td>
-                            <td>Annuel</td>
-                            <td>01/01/2023</td>
-                            <td>01/01/2024</td>
-                            <td><span class="badge bg-success">Actif</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
+                        <c:forEach items="${listes}" var="liste">
+                            <tr>
+                                <td>${liste.nom}</td>
+                                <td>${liste.email}</td>
+                                <td>${liste.dateDebut}</td>
+                                <td>${liste.dateFin}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${empty liste.dateDebut or empty liste.dateFin}">
+                                            <span class="badge bg-danger">Inactif</span>
+                                        </c:when>
+                                        <c:when test="${liste.dateDebut <= today and liste.dateFin >= today}">
+                                            <span class="badge bg-success">Actif</span>
+                                        </c:when>
+                                        <c:when test="${liste.dateFin < today}">
+                                            <span class="badge bg-warning">Expirée</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge bg-secondary">À venir</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                            </tr>
+                        </c:forEach>
+
+
+
                         <!-- Ajoutez d'autres lignes selon vos besoins -->
                         </tbody>
                     </table>

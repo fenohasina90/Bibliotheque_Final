@@ -39,18 +39,7 @@ public class ReservationService {
     }
 
     public boolean estAbonne(Integer idUser, LocalDate dateAReserve) {
-        Abonnement abonnement = abonnementRepository.dernierAbonnementUser(idUser);
-        if (abonnement == null) {
-            return false;
-        }
-
-        LocalDate dateDebut = abonnement.getDateDebut();
-        LocalDate dateFin = abonnement.getDateFin();
-        LocalDate actuel = LocalDate.now();
-
-        return isDateBetweenInclusiveAlt(dateAReserve, dateDebut, dateFin) &&
-                isDateBetweenInclusiveAlt(actuel, dateDebut, dateFin) &&
-                dateAReserve.isAfter(actuel);
+        return abonnementRepository.dernierAbonnementUser(idUser, dateAReserve, dateAReserve).isEmpty();
     }
 
     public boolean valideAgeLivre(Integer idUser, Integer idlivre) {

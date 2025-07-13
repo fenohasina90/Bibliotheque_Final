@@ -37,12 +37,22 @@ public class EmpruntsController {
         this.historiqueLivreRepository = historiqueLivreRepository;
     }
 
-    @PostMapping("/retourner/{id}")
-    public ModelAndView retournerEmprunt(@PathVariable Integer id) {
-        empruntService.retournerEmprunt(id, LocalDate.now());
-        return new ModelAndView("redirect:/emprunts/mes-emprunts?success=Retour+réussi");
-    }
+    @GetMapping("")
+    public ModelAndView listePrets() {
+        ModelAndView mv = new ModelAndView("emprunt/liste");
+        List<EmpruntDetail> emprunts = empruntDetailRepository.findAllByDateRetourIsNull();
 
+        // Vérification des dates null
+        emprunts.forEach(emprunt -> {
+            if (emprunt.getDateDebut() == null || emprunt.getDateFin() == null) {
+                throw new IllegalStateException("Emprunt " + emprunt.getId() + " a des dates invalides");
+            }
+        });
+
+        mv.addObject("emprunts", emprunts);
+        mv.addObject("today", LocalDate.now());
+        return mv;
+    }
 
     @GetMapping("/creer")
     public ModelAndView showCreateEmpruntForm(Model model) {
@@ -71,9 +81,6 @@ public class EmpruntsController {
         );
     }
 
-
-
-
 //    retourr  --------------------------------------------------------------
     @PostMapping("/creer")
     public ModelAndView creerEmprunt(@ModelAttribute EmpruntForm empruntForm) {
@@ -85,28 +92,35 @@ public class EmpruntsController {
                     empruntForm.getDateFin(),
                     empruntForm.getTypeEmpruntId()
             );
-            return new ModelAndView("redirect:/admin");
+            return new ModelAndView("redirect:/emprunts");
         } catch (Exception e) {
             return new ModelAndView("redirect:/emprunts/creer?error=" + e.getMessage());
         }
     }
 
-    @GetMapping("/")
-    public ModelAndView listePrets() {
-        ModelAndView mv = new ModelAndView("emprunt/liste");
-        List<EmpruntDetail> emprunts = empruntDetailRepository.findAllByDateRetourIsNull();
+    @PostMapping("/prolonger/{id}")
+    public ModelAndView prolongerEmprunt(@PathVariable Integer id,
+                                         @RequestParam LocalDate dateFin,
+                                         @RequestParam Integer typePret) {
+        try {
+            empruntService.prolongerLivre(id, dateFin, typePret);
+            return new ModelAndView("redirect:/emprunts");
+        } catch (Exception e) {
+            return new ModelAndView("redirect:/emprunts/prolonger/"+id+"?error=" + e.getMessage());
+        }
+    }
 
-        // Vérification des dates null
-        emprunts.forEach(emprunt -> {
-            if (emprunt.getDateDebut() == null || emprunt.getDateFin() == null) {
-                throw new IllegalStateException("Emprunt " + emprunt.getId() + " a des dates invalides");
-            }
-        });
-
-        mv.addObject("emprunts", emprunts);
-        mv.addObject("today", LocalDate.now());
+    @GetMapping("/prolonger/{id}")
+    public ModelAndView prolongerForm(@PathVariable Integer id){
+        List<TypeEmprunt> typesEmprunt = empruntService.getAllType();
+        ModelAndView mv = new ModelAndView("emprunt/prolonger-emprunt");
+        mv.addObject("livre", empruntService.nomLivreProlonger(id));
+        mv.addObject("typesEmprunt", typesEmprunt);
+        mv.addObject("id", id);
         return mv;
     }
+
+
 
     @GetMapping("/retour/{id}")
     public ModelAndView formulaireRetour(@PathVariable Integer id) {
@@ -129,10 +143,20 @@ public class EmpruntsController {
             @PathVariable Integer id,
             @RequestParam LocalDate dateRetour) {
 
-        ModelAndView mv = new ModelAndView("redirect:/emprunts");
+        try {
+            empruntService.retournerEmprunt(id, dateRetour);
+            return new ModelAndView("redirect:/emprunts");
+        } catch (Exception e) {
+            if (e.getMessage() == "penaliser"){
+                return new ModelAndView("redirect:/penalite/creer/"+id);
+            } else {
+                ModelAndView mav = new ModelAndView("redirect:/emprunts/retour/"+id);
+                mav.addObject("erreur", e.getMessage());
+                return mav;
+            }
+        }
 
-        empruntService.retournerEmprunt(id, dateRetour);
-
-        return mv;
     }
+
+
 }

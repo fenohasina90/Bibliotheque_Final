@@ -84,7 +84,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="/emprunts/">
+            <a class="nav-link active" href="/emprunts">
                 <i class="fas fa-book"></i> Prêts
             </a>
         </li>
@@ -108,7 +108,7 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Liste des prêts en cours</h2>
+            <h2>Liste des prêts</h2>
             <a href="/emprunts/creer">
                 <button class="btn btn-primary">
                     <i class="fas fa-plus"></i> Ajouter
@@ -123,7 +123,7 @@
                     <table class="table table-hover">
                         <thead class="table-light">
                         <tr>
-                            <th>Utilisateur</th>
+                            <th>Nom Utilisateur</th>
                             <th>Livre</th>
                             <th>Type emprunt</th>
                             <th>Date début</th>
@@ -135,7 +135,7 @@
                         <tbody>
                         <c:forEach items="${emprunts}" var="emprunt">
                             <tr>
-                                <td>${emprunt.emprunt.utilisateur.nom}</td>
+                                <td>${emprunt.emprunt.utilisateur.nom} ${emprunt.emprunt.utilisateur.prenom}</td>
                                 <td>${emprunt.livre.titre}</td>
                                 <td>${emprunt.typeEmprunt.nom}</td>
                                 <td>${emprunt.dateDebut}</td>
@@ -151,7 +151,21 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="/emprunts/retour/${emprunt.id}">Rendre</a>
+                                    <c:choose>
+                                        <c:when test="${emprunt.dateFin.isBefore(today)}">
+                                            <a href="/emprunts/retour/${emprunt.id}"><button class="btn btn-primary">Rendre</button> </a>
+                                            <a href="/penalite/creer/${emprunt.id}"><button class="btn btn-danger">Penaliser</button></a>
+                                        </c:when>
+                                        <c:otherwise>
+
+                                            <a href="/emprunts/retour/${emprunt.id}">
+                                                <button class="btn btn-primary">Rendre</button>
+                                            </a>
+                                            <a href="/emprunts/prolonger/${emprunt.id}">
+                                                <button class="btn btn-info">Prolonger</button>
+                                            </a>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
                             </tr>
                         </c:forEach>
