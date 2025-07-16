@@ -98,6 +98,7 @@
                         <th>Utilisateur</th>
                         <th>Date Début</th>
                         <th>Date Fin</th>
+                        <th>Statut</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -126,10 +127,29 @@
                                         ${abonnement.dateFin.toString()}
                                 </div>
                             </td>
+                            <td class="date-info">
+                                <div class="date-value">
+                                    <c:choose>
+                                        <c:when test="${empty abonnement.dateRetour and abonnement.dateFin >= today}">
+                                            <span class="badge bg-danger">En cours</span>
+                                        </c:when>
+                                        <c:when test="${not empty abonnement.dateRetour}">
+                                            <span class="badge bg-danger">Rendu</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge bg-secondary">Expiree</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </td>
                             <td class="actions">
-                                <a href="/abonnement/prolonger?id=${abonnement.id}" class="btn btn-primary">
-                                    <i class="fas fa-calendar-plus"></i> Prolonger
-                                </a>
+                                <c:choose>
+                                    <c:when test="${empty abonnement.dateRetour and abonnement.dateFin >= today}">
+                                        <a href="/emprunts/prolonger/${abonnement.id}" class="btn btn-primary">
+                                            <i class="fas fa-calendar-plus"></i> Prolonger
+                                        </a>
+                                    </c:when>
+                                </c:choose>
                             </td>
                         </tr>
                     </c:forEach>

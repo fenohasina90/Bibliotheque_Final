@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface LivreRepository extends JpaRepository<Livre, Integer> {
     @Query(value = """
-        SELECT l.id AS livreId, l.titre AS titre, l.image AS image, l.exemplaire AS exemplaire, 
+        SELECT l.id AS livreId, l.titre AS titre,l.auteur AS auteur, l.image AS image, l.exemplaire AS exemplaire, 
            (l.exemplaire - t.emprunt) AS disponible
     FROM livre l
     JOIN historique_livre h ON h.livre_id = l.id
@@ -60,4 +60,30 @@ public interface LivreRepository extends JpaRepository<Livre, Integer> {
         AND date_debut = :dateDonne
     """, nativeQuery = true)
     Integer getReservationLivreDisponibility(@Param("dateDonne") LocalDate dateDonne, @Param("idLivre") Integer idLivre);
+
+
+//    Alea
+    @Query(value = """
+        SELECT l.id AS livreId, l.titre AS titre,l.auteur AS auteur, l.image AS image, l.exemplaire AS exemplaire, 
+           (l.exemplaire - t.emprunt) AS disponible
+    FROM livre l
+    JOIN historique_livre h ON h.livre_id = l.id
+    JOIN (
+         SELECT l.id AS livre_id,
+                COUNT(CASE
+                      WHEN h.statut_id = 2 AND h.date_debut = CURRENT_DATE
+                           THEN 1
+                END) AS emprunt
+         FROM livre l
+         LEFT JOIN historique_livre h ON l.id = h.livre_id
+         GROUP BY l.id
+         ORDER BY l.id
+    ) t ON t.livre_id = l.id
+    JOIN livre_adherant la ON la.livre_id = l.id
+    WHERE l.id = :id
+    GROUP BY l.id, t.emprunt
+    """,nativeQuery = true)
+    LivreProjection getInfoLivreJson(@Param("id") Integer id);
+
+
 }
