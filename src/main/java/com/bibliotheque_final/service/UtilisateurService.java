@@ -4,6 +4,7 @@ package com.bibliotheque_final.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.bibliotheque_final.projection.InfoUserProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,10 @@ public class UtilisateurService {
 
     public List<Utilisateur> getAllUser(){
         return utilisateurRepository.findAll();
+    }
+
+    public List<InfoUserProjection> getInfoUser(Integer id){
+        return utilisateurRepository.getInfoUserDetails(id);
     }
 
 

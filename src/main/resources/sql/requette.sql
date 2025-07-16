@@ -192,3 +192,77 @@ AND (date_debut <= '2025-08-18' AND date_fin >= '2025-08-18')
 ORDER BY date_debut DESC
 
 
+
+
+-- alea
+
+SELECT l.id AS livre_id, l.titre AS titre, l.exemplaire AS totalExemplaire, t.emprunt AS emprunte,(l.exemplaire - t.emprunt) disponible
+FROM livre l
+JOIN historique_livre h ON h.livre_id = l.id
+JOIN
+     (SELECT
+           l.id AS livre_id,
+           COUNT(CASE
+                      WHEN h.statut_id = 2 AND h.date_debut = CURRENT_DATE
+                           THEN 1
+                END) AS emprunt
+      FROM livre l
+                LEFT JOIN historique_livre h ON l.id = h.livre_id
+      GROUP BY l.id
+      ORDER BY l.id) t
+ON t.livre_id = l.id
+WHERE l.id = 3
+GROUP BY l.id, t.emprunt;
+
+
+SELECT l.id AS livre_id, l.titre AS titre, l.auteur AS auteur, l.exemplaire AS totalExemplaire, t.emprunt AS emprunte,(l.exemplaire - t.emprunt) disponible
+FROM livre l
+JOIN historique_livre h ON h.livre_id = l.id
+JOIN
+        (SELECT
+            l.id AS livre_id,
+            COUNT(CASE
+                        WHEN h.statut_id = 2 AND h.date_debut = CURRENT_DATE
+                            THEN 1
+                END) AS emprunt
+        FROM livre l
+                LEFT JOIN historique_livre h ON l.id = h.livre_id
+        GROUP BY l.id
+        ORDER BY l.id) t
+ON t.livre_id = l.id
+WHERE l.id = 3
+GROUP BY l.id, t.emprunt
+
+
+select 
+u.nom ||' '|| u.prenom as nom, 
+a.type as typeAdherant, a.nbr_livre_pret as quotaPret, 
+t.nombre_pret_en_cours as pretCours, 
+(a.nbr_livre_pret - t.nombre_pret_en_cours) as restePret,
+tab.date_debut as debutAbonnement, tab.date_fin as finAbonnement,
+q.date_debut penaliteDebut, q.date_fin penaliteFin
+from utilisateur u 
+join adherant a on a.id = u.id_adherant
+full outer join (select e.utilisateur_id as id, COUNT(*) nombre_pret_en_cours from emprunt e
+join emprunt_detail ed on ed.emprunt_id = e.id
+where ed.date_retour is null
+group by e.utilisateur_id) t on u.id = t.id 
+full outer join (select * from abonnement 
+where CURRENT_DATE <= date_fin and CURRENT_DATE >= date_debut) tab on tab.utilisateur_id = u.id 
+full outer join (select * from penalite p
+join emprunt e on e.id = p.emprunt_id) q on q.utilisateur_id = u.id
+where u.id = 1;
+
+
+select * from penalite p
+join emprunt e on e.id = p.emprunt_id   
+where e.utilisateur_id = 2; 
+
+
+
+select * from abonnement where utilisateur_id = 2 and (CURRENT_DATE <= date_fin and CURRENT_DATE >= date_debut);
+
+
+select e.utilisateur_id as id, COUNT(*) nombre_pret_en_cours, from emprunt e
+join emprunt_detail ed on ed.emprunt_id = e.id
+where e.utilisateur_id = 3 and ed.date_retour is null;

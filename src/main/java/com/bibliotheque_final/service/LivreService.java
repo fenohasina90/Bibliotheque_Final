@@ -38,4 +38,8 @@ public class LivreService {
         return livreRepository.findAll();
     }
 
+    public LivreProjection getLivreJson(Integer idLivre){
+        return livreRepository.getInfoLivreJson(idLivre);
+    }
+
 }
