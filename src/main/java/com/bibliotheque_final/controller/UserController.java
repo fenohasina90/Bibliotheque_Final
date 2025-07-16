@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -35,6 +37,7 @@ public class UserController {
     public ModelAndView getListeEmprunt(HttpSession session){
         ModelAndView mv = new ModelAndView("/livre/empruntuser");
         Integer idUser = (Integer) session.getAttribute("utilisateurConnecte");
+        mv.addObject("today", LocalDate.now());
         mv.addObject("listes", empruntService.listeEmpruntUser(idUser));
         return mv;
     }
